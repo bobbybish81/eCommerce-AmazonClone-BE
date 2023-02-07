@@ -1,0 +1,35 @@
+{
+  "name": "ecommerce-amazonclone-be",
+  "version": "1.0.0",
+  "description": "The backend of a e-commerce application",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon ./src/server.js",
+    "start": "node ./src/server.js",
+    "lint": "eslint '**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bobbybish81/eCommerce-AmazonClone-BE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bobbybish81/eCommerce-AmazonClone-BE/issues"
+  },
+  "homepage": "https://github.com/bobbybish81/eCommerce-AmazonClone-BE#readme",
+  "dependencies": {
+    "babel-install": "^2.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "jsonwebtoken": "^9.0.0",
+    "mongodb": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "nodemon": "^2.0.20"
+  }
+}
