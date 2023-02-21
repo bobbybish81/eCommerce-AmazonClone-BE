@@ -8,7 +8,6 @@ import {
   getStores
 } from './mongodb.js';
 
-import dotenv from 'dotenv';
 import pkg from 'jsonwebtoken';
 import cors from "cors";
 
@@ -85,9 +84,7 @@ app
           .json({message: 'Incorrect password!'}); 
       }
 
-      const env = dotenv.config().parsed;
-      const jwtSecret = env.JWT_SECRET;
-      // const jwtSecret = process.env.JWT_SECRET;
+      const jwtSecret = process.env.JWT_SECRET;
       const { sign } = pkg;
       const jwToken = sign({
           id: user[0].id,

@@ -1,9 +1,6 @@
 import { MongoClient } from 'mongodb';
-import dotenv from 'dotenv';
 
-const env = dotenv.config().parsed;
-const url = env.MONGO_URL;
-// const url = process.env.MONGO_URL;
+const url = process.env.MONGO_URL;
 const dbName = 'saltazonDatabase';
 
 let client;
