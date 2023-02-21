@@ -23,12 +23,16 @@
   "homepage": "https://github.com/bobbybish81/eCommerce-AmazonClone-BE#readme",
   "dependencies": {
     "babel-install": "^2.1.0",
+    "bcrypt": "^5.1.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "joi": "^17.7.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.0.0"
   },
   "devDependencies": {
+    "dotenv": "^16.0.3",
     "eslint": "^8.33.0",
     "nodemon": "^2.0.20"
   }

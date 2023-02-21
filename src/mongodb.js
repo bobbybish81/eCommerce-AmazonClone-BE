@@ -1,6 +1,9 @@
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
 
-const url = process.env.MONGO_URL;
+const env = dotenv.config().parsed;
+const url = env.MONGO_URL;
+// const url = process.env.MONGO_URL;
 const dbName = 'saltazonDatabase';
 
 let client;
@@ -31,8 +34,8 @@ const connectStores = async () => {
 
 export const getUsers = async () => {
   await connectUsers();
-  const userList = await users.find().toArray();
-  return userList;
+  const existingUsers = await users.find().toArray();
+  return existingUsers;
 };
 
 export const getUser = async (email) => {
@@ -41,19 +44,25 @@ export const getUser = async (email) => {
   return user;
 };
 
-export const postNewUser = async (newUser) => {
+export const postNewUser = async (reqBody) => {
   await connectUsers();
+  const existingUsers = await getUsers()
+  const sortedUsers = [...existingUsers].sort((a , b) => a.id < b.id ? 1 : -1);
+
+  const newUserId = sortedUsers[0].id + 1;
+  const newUser = {
+    id: newUserId,
+    email: reqBody.email,
+    password: reqBody.password,
+    role: reqBody.role,
+    uniqueStoreId: reqBody.uniqueStoreId
+  }
   await users.insertOne(newUser)
 };
 
 export const deleteUser = async (email) => {
-  try {
-    await connectUsers();
-    await users.deleteOne({email: email});
-    } catch (e) {
-    throw new Error(e.message);
-  }
-  
+  await connectUsers();
+  await users.deleteOne({email: email});
 };
 
 
@@ -65,24 +74,51 @@ export const getProducts = async () => {
   return productList;
 };
 
-export const getProduct = async (id, uniqueStoreId) => {
+export const getProduct = async (id) => {
   await connectProducts();
-  const product = await products.find({id: id, uniqueStoreId: uniqueStoreId}).toArray();
-  return product;
+  const product = await products.find({id: parseInt(id)}).toArray();
+  return product[0];
 };
 
-export const postNewProduct = async (newProduct) => {
+export const getStoreProducts = async (storeId) => {
   await connectProducts();
+  const productList = await products.find({storeId: parseInt(storeId)}).toArray();
+  return productList;
+};
+
+export const updateProductDetail = async (storeId, id, reqBody) => {
+  await connectProducts();
+  await products.updateOne(
+    {
+      id: parseInt(id),
+      storeId: parseInt(storeId),
+    },
+    {
+      $set: {
+        price: reqBody.price,
+        quantity: reqBody.quantity,
+      },
+    },
+  );
+  const productList = await products.find().toArray();
+  return productList;
+};
+
+export const postNewProduct = async (storeId, reqBody) => {
+  await connectProducts();
+  const productList = await getProducts()
+  const sortedProducts = [...productList].sort((a , b) => a.id < b.id ? 1 : -1);
+
+  const newProductId = sortedProducts[0].id + 1;
+  const newProduct = reqBody;
+  newProduct.id = newProductId;
+  newProduct.storeId = parseInt(storeId);
   await products.insertOne(newProduct)
 };
 
-export const deleteProduct = async (id, storeId) => {
-  try {
-    await connectProducts();
-    await products.deleteOne({id: id, storeId: storeId});
-    } catch (e) {
-    throw new Error(e.message);
-  }
+export const deleteProduct = async (storeId ,id) => {
+  await connectProducts();
+  await products.deleteOne({storeId: parseInt(storeId), id: parseInt(id)});
 };
 
 
@@ -94,37 +130,15 @@ export const getStores = async () => {
   return storeList;
 };
 
-export const getStore = async (uniqueStoreId) => {
-  await connectStores();
-  const store = await stores.find({uniqueStoreId: uniqueStoreId}).toArray();
-  return store;
-};
-
-export const postNewStore = async (newStore) => {
-  await connectStores();
-  await stores.insertOne(newStore)
-};
-
-export const deleteStore = async (uniqueStoreId) => {
-  try {
-    await connectStores();
-    await stores.deleteOne({ uniqueStoreId });
-    } catch (e) {
-    throw new Error(e.message);
-  }
-};
-
 export default { 
   getUsers,
   getUser,
   postNewUser,
   deleteUser,
   getProducts,
-  getProduct,
+  getStoreProducts,
   postNewProduct,
+  updateProductDetail,
   deleteProduct,
   getStores,
-  getStore,
-  postNewStore,
-  deleteStore,
 }; 
