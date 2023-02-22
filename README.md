@@ -79,6 +79,14 @@ POST /api/store/:storeid/products - Add new product for specifc store
 PATCH /api/store/:storeid/products/:id - Update product detail
 DELETE /api/store/:storeid/products/:id - Delete product
 
+# further development
+ - add middleware for token authentication with each request
+ - add super-admin feature to allow user to add/delete stores
+ - adjust the product quantities in the database following a purchase
+ - create order up after checking out the cart. The user puts up an order, the store admin marks it as sent/ready to pick up and then the user marks it as picked up.
+ - approve new stores
+ - add employees to stores
+- 
 # Author
 <h3>Robert Bish</h3>
 
