@@ -1,6 +1,8 @@
 # eCommerce-AmazonClone-BE
 The backend of a e-commerce application
 
+Deployed link: https://saltazon-online.netlify.app
+
 # Technologies
 Javascript • 
 Node JS • 
